@@ -192,6 +192,7 @@ public class ObjectParser {
             if(arg.contains(":"))
             {
                 String clazzName = arg.split(":")[0];
+                String var = arg.split(":")[1];
                 clazz = Env.getClassByName(clazzName);
 
                 // if class wasn't found
@@ -200,9 +201,20 @@ public class ObjectParser {
                     clazz = (Class<?>) ObjectList.getObject(clazzName);
                 }
 
-                if(clazz == null) clazz = Env.findClass(arg.split(":")[0]);
+                if(clazz == null) clazz = Env.findClass(clazzName);
 
-                o = ObjectList.getObject(arg.split(":")[1]);
+                if(clazz == null) throw new NullPointerException("Class not found!");
+
+                Object obj = ObjectList.getObject(var);
+
+                if(obj instanceof String)
+                {
+                    o = String.valueOf(obj);
+                }
+                else
+                {
+                    o = clazz.cast(obj);
+                }
             }
             else
             {
