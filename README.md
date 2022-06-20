@@ -11,8 +11,10 @@ Or you can parse lines
 ReflectionParser.parseLine("class Test = org.test.Test");
 ```
 
-You can see example of syntax in file `example.txt`<br>
+You can see example of syntax in file `example.txt`
+
 Comments are allowed only at the start of the line using `//`
+
 ---
 ### Classes
 
