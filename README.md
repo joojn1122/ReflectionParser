@@ -45,6 +45,7 @@ void _ System->out->println(%name%)
 
 Unfortunately we can't use `System->out->println("John")`
 because it's not implemented yet.
+
 ---
 ### **Objects**
 
