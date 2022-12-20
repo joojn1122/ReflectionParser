@@ -1,73 +1,75 @@
 # Simple Reflection Parser
 
 Parsing file in java
-```
-File f = new File("filename");
-ReflectionParser.parseFile(f);
+```java
+File file = new File("Example.txt");
+
+ReflectionParser parser = new ReflectionParser();
+Files.readAllLines(file.toPath()).forEach(parser::parseLine);
 ```
 
-Or you can parse lines
+You can change comments to anything you want, default is "#"
+```java
+new ReflectionParser("//");
 ```
-ReflectionParser.parseLine("class Test = org.test.Test");
-```
-
-You can see example of syntax in file `example.txt`
-
-Comments are allowed only at the start of the line using `//`
 
 ---
 ### Classes
 
-We can create a shortcut for classes
+Importing classes is simple
 ```
-class System = java.lang.System
+import java.lang.reflect.Field
 
-string text = "Hello World"
-void _ = System->out->println(%text%)
+# print field class
+System->out->println(Field)
 ```
+Unlike java, these classes are already class objects
 
-_or without shortcut_
+_or calling it without import_
 
 ```
-string text = "Hello World"
-void _ = java.lang.System->out->println(%text%)
+System->out->println(java.lang.reflect.Field)
 ```
 ---
 ### **Variables**
 
-For variables, we use `%variable%`
+Unlike java, variables are not declared and they don't have data types
 ```
-class System = java.lang.System
-
-string name = "John"
-void _ System->out->println(%name%)
+name = "John"
+System->out->println(name->getClass())
+# java.lang.String
 ```
-
-Unfortunately we can't use `System->out->println("John")`
-because it's not implemented yet.
 
 ---
-### **Objects**
-
-These keywords to create object:
-  - `object` - create any object
-  - `void` - ignore value of return (example void method)
-
-To create java objects:
-  - `string` - create a new string (has to be capital s)
-  - `integer / int` - create a new integer
-  - `char / character` - create a new character
-  - `boolean` - create a new boolean
-
-Example:
+### **Constructors**
+Constructors are same as methods, but
+instead of using "new" you simply call
+it as method but with these brackets "<>"
 ```
-class String = java.lang.String
+# create new object
+object = Object<>
+System->out->println(object->toString())
+```
 
-// init new variables
-string test = "test"
-char ch = 'a'
-int i = 0
+Also in methods and constructors you can 
+specify parameter types like this
+```
+System->out->println(null: Object)
+```
+_Without the "Object" type, it would crash
+(NullPointerException), because it doesn't 
+know which method to call_
 
-// it's still string but it's not being inicialized so it's object
-object test2 = String->valueOf(%i%)
+---
+### **Arithmetics**
+
+Arithmetics are not implemented, but there is a helper class
+```
+import com.joojn.reflectionparser.util.MathUtil
+
+a = 10
+b = 20
+
+System->out->println(MathUtil->add(a, b))
+# 30
 ```

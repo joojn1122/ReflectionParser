@@ -1,7 +1,19 @@
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
-import org.bukkit.Statistic
+# import org.bukkit.Bukkit
+# import org.bukkit.entity.Player
+# import org.bukkit.Statistic
 
-player = Bukkit->getPlayer("Player609")
-player_stat = player->getStatistic(Statistic->PLAY_ONE_TICK)
-Bukkit->getConsoleSender()->sendMessage(String->valueOf(player_stat))
+# player = Bukkit->getPlayer("Player609")
+# player_stat = player->getStatistic(Statistic->PLAY_ONE_TICK)
+# Bukkit->getConsoleSender()->sendMessage(String->valueOf(player_stat))
+
+import com.joojn.reflectionparser.util.MathUtil
+
+a = 10
+b = 20
+
+System->out->println(null: Object)
+# null
+System->out->println(Object<>->hashCode())
+# 363771819 (random hashcode)
+System->out->println(MathUtil->add(a, b))
+# 70
