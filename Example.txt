@@ -1,18 +1,7 @@
-// map classes
-class Bukkit = org.bukkit.Bukkit
-class Player = org.bukkit.entity.Player
-class Statistic = org.bukkit.Statistic
-class String = java.lang.String
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import org.bukkit.Statistic
 
-// get target's name
-string player_name = "Player609"
-// get player object
-object player = Bukkit->getPlayer(%player_name%)
-// get statistic enum
-object stat = Statistic->PLAY_ONE_TICK
-// get value of statistic (int)
-object player_stat = %player%->getStatistic(%stat%)
-// convert int to String
-object player_stat_string = String->valueOf(%player_stat%)
-// void means return value is null (method is void) -> get console sender -> print player's playtime to console
-void _ = Bukkit->getConsoleSender()->sendMessage(%player_stat_string%)
+player = Bukkit->getPlayer("Player609")
+player_stat = player->getStatistic(Statistic->PLAY_ONE_TICK)
+Bukkit->getConsoleSender()->sendMessage(String->valueOf(player_stat))
