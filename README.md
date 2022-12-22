@@ -3,9 +3,18 @@
 Parsing file in java
 ```java
 File file = new File("Example.txt");
-
 ReflectionParser parser = new ReflectionParser();
-Files.readAllLines(file.toPath()).forEach(parser::parseLine);
+
+Files.readAllLines(file.toPath()).forEach(line -> {
+    Object returned = parser.parseLine(line);
+
+    // this only happens when you for example
+    // call method without assigning it to a variable
+    // or just writing variable's name
+    // you can remove this if you want
+    if(returned != TypeManager.VOID && returned != null)
+          System.out.println(returned);
+});
 ```
 
 You can change comments to anything you want, default is "#"
