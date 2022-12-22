@@ -21,14 +21,22 @@ Importing classes is simple
 import java.lang.reflect.Field
 
 # print field class
-System->out->println(Field)
+System.out.println(Field)
 ```
 Unlike java, these classes are already class objects
 
-_or calling it without import_
+You can also alias imports to
+make them easier to use or when you have 
+multiple imports with the same name, because
+unlike java you can't type whole package name
 
 ```
-System->out->println(java.lang.reflect.Field)
+import java.lang.reflect.Field as F
+
+System.out.println(F)
+
+# this throws an error
+System.out.println(java.lang.reflect.Field)
 ```
 ---
 ### **Variables**
@@ -36,7 +44,7 @@ System->out->println(java.lang.reflect.Field)
 Unlike java, variables are not declared and they don't have data types
 ```
 name = "John"
-System->out->println(name->getClass())
+System.out.println(name.getClass())
 # java.lang.String
 ```
 
@@ -48,13 +56,13 @@ it as method but with these brackets "<>"
 ```
 # create new object
 object = Object<>
-System->out->println(object->toString())
+System.out.println(object.toString())
 ```
 
 Also in methods and constructors you can 
 specify parameter types like this
 ```
-System->out->println(null: Object)
+System.out.println(null: Object)
 ```
 _Without the "Object" type, it would crash
 (NullPointerException), because it doesn't 
@@ -70,6 +78,6 @@ import com.joojn.reflectionparser.util.MathUtil
 a = 10
 b = 20
 
-System->out->println(MathUtil->add(a, b))
+System.out.println(MathUtil.add(a, b))
 # 30
 ```

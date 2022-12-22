@@ -1,17 +1,21 @@
 package com.joojn.reflectionparser;
 
+import com.joojn.reflectionparser.exception.ParseErrorException;
 import com.joojn.reflectionparser.manager.ImportManager;
+import com.joojn.reflectionparser.manager.TypeManager;
 import com.joojn.reflectionparser.manager.VariableManager;
+
+import java.util.Arrays;
 
 public class ReflectionParser {
 
-    public static final boolean DEBUG   = false;
+    public static final boolean DEBUG = false;
 
     private final VariableManager        variableManager = new VariableManager();
     private final ImportManager          importManager   = new ImportManager();
     private final ReflectionInterpreter  interpreter     = new ReflectionInterpreter(variableManager, importManager);
 
-    public final String COMMENT;
+    private final String COMMENT;
 
     public ReflectionParser()
     {
@@ -24,17 +28,37 @@ public class ReflectionParser {
         this.COMMENT = comment;
     }
 
-    public void parseLine(String code)
+    /**
+     * Parses the given code and returns the result if any.
+     * @author joojn
+     * @param code The code to parse.
+     * @return the result of the code or `TypeManager.VOID` if no result is returned.
+     */
+    public Object parseLine(String code)
+    {
+        try
+        {
+            return parseLine_(code);
+        }
+        catch (Exception e)
+        {
+            throw new ParseErrorException(
+                    "Error at line: '%s', message: '%s'", code, e.getMessage()
+            );
+        }
+    }
+
+    private Object parseLine_(String code)
     {
         // remove comments
         code = code.split(COMMENT)[0];
 
-        if(code.replace(" ", "").isEmpty()) return;
+        if(code.replace(" ", "").isEmpty()) return TypeManager.VOID;
 
         if(code.startsWith("import"))
         {
             importManager.addImport(code);
-            return;
+            return TypeManager.VOID;
         }
 
         // remove all unnecessary whitespace
@@ -43,11 +67,11 @@ public class ReflectionParser {
         if(variableManager.isVariableAssignment(code))
         {
             variableManager.addVariable(interpreter, code);
-            return;
+            return TypeManager.VOID;
         }
 
         // Call method?
-        interpreter.interpret(code);
+        return interpreter.interpret(code);
     }
 
     private String removeCharsExceptQuotes(String group, char c) {

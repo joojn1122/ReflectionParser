@@ -27,8 +27,6 @@ public class MathUtil {
         return a * b;
     }
 
-    // generate all these methods for all number types
-
     public static double div(double a, double b)
     {
         return a / b;

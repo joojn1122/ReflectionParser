@@ -1,5 +1,6 @@
 package com.joojn.reflectionparser;
 
+import com.joojn.reflectionparser.debug.Debugger;
 import com.joojn.reflectionparser.exception.ParseErrorException;
 import com.joojn.reflectionparser.manager.ImportManager;
 import com.joojn.reflectionparser.manager.TypeManager;
@@ -36,68 +37,41 @@ public class ReflectionInterpreter {
 
     public Object interpret(String code)
     {
-        String[] groups = splitCurrentStack(code);
+        List<String> movedGroups = new ArrayList<>();
+        boolean wasNumber = false;
+
+        for(String group : splitCurrentStack(code, '.'))
+        {
+            if(TypeManager.isNumber(group))
+            {
+                if(wasNumber)
+                {
+                    int last = movedGroups.size() - 1;
+                    String lastNumber = movedGroups.get(last);
+                    movedGroups.set(last, lastNumber + "." + group);
+
+                    wasNumber = false;
+                    continue;
+                }
+
+                wasNumber = true;
+            }
+
+            movedGroups.add(group);
+        }
+
+        Debugger.log("Moved groups: " + movedGroups);
 
         Object stack = null;
         boolean init = true;
 
-        for(String group : groups)
+        for(String group : movedGroups)
         {
             stack = addToStack(group, stack, init);
             init  = false;
         }
 
         return stack;
-    }
-
-    private String[] splitCurrentStack(String code)
-    {
-        // player->getStatistic(Statistic->PLAY_ONE_TICK)
-        // should return [player, getStatistic(..)]
-
-        int brackets  = 0;
-
-        StringBuilder currentBuilder = new StringBuilder();
-        List<String> values = new ArrayList<>();
-
-        for(char c : code.toCharArray())
-        {
-            if(
-                    currentBuilder.length() != 0
-                            && brackets == 0
-                            && c == '>'
-                            && currentBuilder.charAt(currentBuilder.length() - 1) == '-')
-            {
-
-                // remove last char (-)
-                currentBuilder.setLength(currentBuilder.length() - 1);
-                values.add(currentBuilder.toString());
-                currentBuilder.setLength(0);
-
-                // skip adding char (>)
-                continue;
-            }
-            else if(c == '(')
-            {
-                brackets++;
-            }
-            else if(c == ')')
-            {
-                brackets--;
-
-                if(brackets == -1)
-                    throw new ParseErrorException("Weird brackets?");
-            }
-
-            currentBuilder.append(c);
-        }
-
-        if(currentBuilder.length() != 0)
-        {
-            values.add(currentBuilder.toString());
-        }
-
-        return values.toArray(new String[0]);
     }
 
     private String[] splitCurrentStack(String code, char splitter)
@@ -168,19 +142,21 @@ public class ReflectionInterpreter {
             {
                 try
                 {
+                    if(endsIgnoreCase(group, 'f'))
+                        return Float.parseFloat(group.substring(0, group.length() - 1));
+                    if(endsIgnoreCase(group, 'd'))
+                        return Double.parseDouble(group.substring(0, group.length() - 1));
+                    if(endsIgnoreCase(group, 'l'))
+                        return Long.parseLong(group.substring(0, group.length() - 1));
+
                     if(group.contains("."))
-                    {
                         return Double.parseDouble(group);
-                    }
                     else
-                    {
                         return Integer.parseInt(group);
-                    }
                 }
-                catch (NumberFormatException e)
-                {
-                    throw new ParseErrorException("Invalid number: %s", group);
-                }
+                catch (NumberFormatException ignored) {}
+
+                throw new ParseErrorException("Invalid number %s", group);
             }
 
             if(TypeManager.isBoolean(group))
@@ -222,6 +198,12 @@ public class ReflectionInterpreter {
         return getField(stack, group);
     }
 
+    private boolean endsIgnoreCase(String group, char l)
+    {
+        char last = group.charAt(group.length() - 1);
+        return last == l || last == Character.toUpperCase(l);
+    }
+
     private Object callMethod(Object stack, String group) {
         // group: getStatistic(Statistic->PLAY_ONE_TICK("", 1), 2)
         // stack: player
@@ -255,7 +237,7 @@ public class ReflectionInterpreter {
         // full: player->getStatistic(Statistic->PLAY_ONE_TICK)
         // arg: Statistic->PLAY_ONE_TICK
 
-        String[] groups = arg.split(":");
+        String[] groups = splitCurrentStack(arg, ':');
         String object = groups[0];
         String strType = groups.length == 2 ? groups[1] : null;
 

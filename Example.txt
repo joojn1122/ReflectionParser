@@ -2,18 +2,23 @@
 # import org.bukkit.entity.Player
 # import org.bukkit.Statistic
 
-# player = Bukkit->getPlayer("Player609")
-# player_stat = player->getStatistic(Statistic->PLAY_ONE_TICK)
-# Bukkit->getConsoleSender()->sendMessage(String->valueOf(player_stat))
+# player = Bukkit.getPlayer("Player609")
+# player_stat = player.getStatistic(Statistic.PLAY_ONE_TICK)
+# Bukkit.getConsoleSender().sendMessage(String.valueOf(player_stat))
 
 import com.joojn.reflectionparser.util.MathUtil
 
-a = 10
-b = 20
+a = 10.5 # double
+b = 20d  # double
 
-System->out->println(null: Object)
+System.out.println(a)
+# 10.5
+
+System.out.println(null: Object)
 # null
-System->out->println(Object<>->hashCode())
+
+System.out.println(Object<>.hashCode())
 # 363771819 (random hashcode)
-System->out->println(MathUtil->add(a, b))
+
+System.out.println(MathUtil.add(a, b))
 # 70

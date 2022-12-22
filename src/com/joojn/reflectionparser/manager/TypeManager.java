@@ -2,7 +2,12 @@ package com.joojn.reflectionparser.manager;
 
 import com.joojn.reflectionparser.exception.ParseErrorException;
 
-public class TypeManager {
+import java.util.regex.Pattern;
+
+public enum TypeManager {
+    VOID;
+
+    private final static Pattern NUMBER_PATTERN = Pattern.compile("(-)?[0-9]+(\\.[0-9]+)?([fdl])?");
 
     public static boolean isMethod(String group)
     {
@@ -29,7 +34,7 @@ public class TypeManager {
 
     public static boolean isNumber(String group)
     {
-        return Character.isDigit(group.charAt(0));
+        return NUMBER_PATTERN.matcher(group).matches();
     }
 
     public static boolean isBoolean(String group)

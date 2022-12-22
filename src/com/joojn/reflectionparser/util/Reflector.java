@@ -8,6 +8,20 @@ public class Reflector {
 
     public static Class<?> getClass(String name)
     {
+        switch(name)
+        {
+            case "int": return int.class;
+            case "long": return long.class;
+            case "short": return short.class;
+            case "byte": return byte.class;
+            case "float": return float.class;
+            case "double": return double.class;
+            case "boolean": return boolean.class;
+            case "char": return char.class;
+            case "void": return void.class;
+            default: break;
+        }
+
         try
         {
             return AdvancedReflector.class.getClassLoader().loadClass(name);
@@ -145,6 +159,8 @@ public class Reflector {
 
     public static boolean isInstance(Class<?> clazz, Class<?> clazz2)
     {
+        if(clazz == clazz2) return true;
+
         if(clazz.isPrimitive()) return isPrimitive(clazz, clazz2);
         if(clazz2.isPrimitive()) return isPrimitive(clazz2, clazz);
 
