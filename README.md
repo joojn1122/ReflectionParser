@@ -26,7 +26,7 @@ new ReflectionParser("//");
 ### Classes
 
 Importing classes is simple
-```
+```python
 import java.lang.reflect.Field
 
 # print field class
@@ -39,7 +39,7 @@ make them easier to use or when you have
 multiple imports with the same name, because
 unlike java you can't type whole package name
 
-```
+```python
 import java.lang.reflect.Field as F
 
 System.out.println(F)
@@ -51,7 +51,7 @@ System.out.println(java.lang.reflect.Field)
 ### **Variables**
 
 Unlike java, variables are not declared and they don't have data types
-```
+```python
 name = "John"
 System.out.println(name.getClass())
 # java.lang.String
@@ -62,7 +62,7 @@ System.out.println(name.getClass())
 Constructors are same as methods, but
 instead of using "new" you simply call
 it as method but with these brackets "<>"
-```
+```python
 # create new object
 object = Object<>
 System.out.println(object.toString())
@@ -70,7 +70,7 @@ System.out.println(object.toString())
 
 Also in methods and constructors you can 
 specify parameter types like this
-```
+```python
 System.out.println(null: Object)
 ```
 _Without the "Object" type, it would crash
@@ -81,7 +81,7 @@ know which method to call_
 ### **Arithmetics**
 
 Arithmetics are not implemented, but there is a helper class
-```
+```python
 import com.joojn.reflectionparser.util.MathUtil
 
 a = 10
